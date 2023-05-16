@@ -34,4 +34,6 @@ def get_ttl(ping_out: str):
 
 # get rtt
 def get_rtt(ping_out: str):
-    return get_lines(ping_out)[-1].split()[-2].split('/')
+    rtt = get_lines(ping_out)[-1].split()[-2].split('/')
+    print(rtt)
+    return list(map(float, rtt))

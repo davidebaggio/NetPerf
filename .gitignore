@@ -1,3 +1,2 @@
-*.pdf
-output/*
+output/*.txt
 .vscode
