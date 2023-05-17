@@ -1,11 +1,10 @@
 from linux import main as linuxmain
 from windows import main as windowsmain
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-
 
 # detect operating system
+
+
 def detect_os():
     if os.name == "nt":
         return "windows"

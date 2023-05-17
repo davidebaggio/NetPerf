@@ -3,6 +3,7 @@ from fileout import *
 import re
 import statistics
 import socket
+import calculation
 
 # get rtt
 
@@ -27,6 +28,9 @@ def get_ttl(ping_out: str):
 def tracert(ip):
     return run_command(['tracert', ip])
 
+# get number of tracert considering that some lines does not trace
+
+
 # get ip
 
 
@@ -50,38 +54,55 @@ def run_netperf(ip: str, k_packets=10, l_packets=64, info=False):
     rtt = get_rtt(out)
     round_trip_times = re.findall(r"=(\d+)ms", out)
     round_trip_times = list(map(int, round_trip_times))
-    # print(round_trip_times)
     stdev = statistics.pstdev(round_trip_times)
     rtt.append(stdev)
+    
+    ttl = None
 
     if info:
         print(out)
-        ttl = get_ttl(out)
-        print(ttl)
-
+        print("------------------------------------")
+        
         trace = tracert(ip)
+        ttl = get_ttl(out)
+        
         print(trace)
+        print("------------------------------------")
 
         length = len(get_lines(trace))
-        print(length)
+        # print(length)
         if (64 - ttl + 1) == length:
             print("TTL is correct")
+        print("RTT: ")
+        print(rtt)
         output_to_file(ip, out, trace, ttl)
 
-    return rtt
+    return rtt, ttl
 
 
 def main():
     host = "atl.speedtest.clouvider.net"
     ip = get_ip(host)
     print(ip)
-    run_netperf(ip, l_packets=10, info=True)
-
+    ttl = run_netperf(ip, l_packets=10, info=True)[1]
+    hops = ttl * 2
+    
     overall_performances = []
     steps = list(range(64, 1472, 64))
+    
 
-    '''for i in steps:
-		print("-----------------------")
-		print(f"Running netperf with packets of size {i * 8} bits")
-		overall_performances.append(run_netperf(ip, l_packets=i))
-'''
+    for i in steps:
+        print("++++++++++++++++++++++++++++++++++++++++++++")
+        print(f"Running netperf with packets of size {i * 8} bits")
+        rtt = run_netperf(ip, l_packets=i)[0]
+        overall_performances.append(rtt)
+
+    # change steps from byte to all bit
+    for i in range(len(steps)):
+        steps[i] = (steps[i] + 28) * 8
+    
+    calculation.plot_all(steps, overall_performances)
+    s, s_b = calculation.calculate_throughput(steps, overall_performances, hops)
+    
+    print(f"Throughput: {s} bits/s")
+    print(f"Throughput Bottleneck: {s_b} bits/s")
