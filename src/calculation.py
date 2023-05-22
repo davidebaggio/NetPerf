@@ -2,9 +2,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 # get performance
-
-
 def get_performance(overall_performances, steps):
     min_rtt = []
     avg_rtt = []
@@ -19,33 +18,33 @@ def get_performance(overall_performances, steps):
     
     return min_rtt, avg_rtt, max_rtt, stdev_rtt
 
+
 # plot the 4 graphs in one window
-
-
 def plot_all(steps, overall_performances):
     x = steps
-    y1, y2, y3, y4 = get_performance(overall_performances, steps)
-    fig, ax = plt.subplots()
-    ax.set_xlabel("L (bits)")
-    ax.set_ylabel("RTT (ms)")
-    ax.plot(x, y1, 'o', label="Min RTT")
-    ax.plot(x, y2, 'o', label="Avg RTT")
-    ax.plot(x, y3, 'o', label="Max RTT")
-    ax.plot(x, y4, 'o', label="Std RTT")
-    ax.legend()
+    performances = get_performance(overall_performances, steps)
+    labels = ["Min RTT", "Avg RTT", "Max RTT", "Std RTT"]
+    colors = ["green", "yellow", "red", "blue"]
+    ax = plt.subplots(2, 2)[1]
+    index = 0
+    for i in range(0, 2):
+        for j in range(0,2):
+            ax[i, j].set_xlabel("L (bits)")
+            ax[i, j].set_ylabel("RTT (ms)")
+            ax[i, j].plot(x, performances[index], 'o', color=colors[index])
+            ax[i, j].set_title(labels[index])
+            index += 1
     plt.show()
 
+
 # get a coeff
-
-
 def coeff_a(steps, overall_performances):
     min_rtt = get_performance(overall_performances, steps)[0]
     fit = np.polynomial.polynomial.polyfit(steps, min_rtt, 1)
     return float(fit[1])
 
+
 # calculate S and S_b
-
-
 def calculate_throughput(steps, overall_performances, n_links):
     a = coeff_a(steps, overall_performances)
     s = float(n_links) / a
