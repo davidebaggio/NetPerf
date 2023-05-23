@@ -30,9 +30,8 @@ def plot_all(steps, overall_performances):
     for i in range(0, 2):
         for j in range(0,2):
             ax[i, j].set_xlabel("L (bits)")
-            ax[i, j].set_ylabel("RTT (ms)")
+            ax[i, j].set_ylabel(labels[index] + "(ms)")
             ax[i, j].plot(x, performances[index], 'o', color=colors[index])
-            ax[i, j].set_title(labels[index])
             index += 1
     plt.show()
 
@@ -40,8 +39,9 @@ def plot_all(steps, overall_performances):
 # get a coeff
 def coeff_a(steps, overall_performances):
     min_rtt = get_performance(overall_performances, steps)[0]
-    fit = np.polynomial.polynomial.polyfit(steps, min_rtt, 1)
-    return float(fit[1])
+    min_s = [x/1000 for x in min_rtt]
+    fit_s = np.polyfit(steps, min_s, 1)
+    return fit_s[0]
 
 
 # calculate S and S_b

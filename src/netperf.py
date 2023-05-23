@@ -4,9 +4,8 @@ import managecmd
 import calculation
 import os
 
+
 # detect operating system
-
-
 def detect_os():
     if os.name == "nt":
         return "windows"
@@ -15,18 +14,16 @@ def detect_os():
     else:
         return "unknown"
 
+
 # running network performance
-
-
 if __name__ == "__main__":
-    print("Insert hostname, skip by pressing enter. The default hostname is \'lon.speedtest.clouvider.net\'")
-    host = input("--> ")
-    print(host)
-    if len(host) == 2:
+    host = input("Insert hostname, skip by pressing enter. The default hostname is \'lon.speedtest.clouvider.net\' \n--> ")
+    if host.strip() == "":
         host = "lon.speedtest.clouvider.net"
     ip = managecmd.get_ip(host)
     print(f"IP: {ip}")
-    steps = list(range(64, 128, 16))
+    steps = list(range(64, 1472, 16))
+    
     os = detect_os()
     if os == "windows":
         overall_performances, actual_hops = windowsmain(ip, steps)
