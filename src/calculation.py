@@ -39,7 +39,7 @@ def plot_all(steps, overall_performances):
 # get a coeff
 def coeff_a(steps, overall_performances):
     min_rtt = get_performance(overall_performances, steps)[0]
-    min_s = [x/1000 for x in min_rtt]
+    min_s = [x/1000 for x in min_rtt] # convert from ms to s
     fit_s = np.polyfit(steps, min_s, 1)
     return fit_s[0]
 

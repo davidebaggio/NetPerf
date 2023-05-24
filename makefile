@@ -1,5 +1,7 @@
 
-all:
+all: install exe
+
+exe:
 	if [ ! -d "./output" ]; then mkdir output; fi
 	python3 -B ./src/netperf.py
 
