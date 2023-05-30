@@ -9,7 +9,7 @@ import calculation
 
 def route_info(ip: str):
     print("-------------Finding amount of hops to the host-------------")
-    count_hops = 30
+    count_hops = 64
     while count_hops > 0:
         try:
             ping(ip, n=1, ttl=count_hops, size=1)
@@ -18,6 +18,9 @@ def route_info(ip: str):
             count_hops += 1
             break
     print("------------------------------------------------------------")
+    if count_hops == 0:
+        print("No links found, connection might be timed out")
+        exit(1)
 
     ping_info = ping(ip, n=10, ttl=64, size=64)
     print(ping_info)
@@ -71,7 +74,7 @@ def get_stdev(out: str):
 
 
 # net performance
-def run_netperf(ip: str, k_packets=10, TimeToLive=64, l_packets=64, info=False):
+def run_netperf(ip: str, k_packets=20, TimeToLive=64, l_packets=64, info=False):
 
     ping_info = ping(ip, n=k_packets, ttl=TimeToLive, size=l_packets)
     rtt = get_rtt(ping_info)

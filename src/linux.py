@@ -3,9 +3,11 @@ from fileout import *
 import pingparsing as pp
 
 # print route info
+
+
 def route_info(ip: str, sudo):
     print("-------------Finding amount of hops to the host-------------")
-    count_hops = 30
+    count_hops = 64
     while count_hops > 0:
         try:
             ping(ip, n=1, ttl=count_hops, size=1, sudo=sudo)
@@ -14,6 +16,10 @@ def route_info(ip: str, sudo):
             count_hops += 1
             break
     print("------------------------------------------------------------")
+    if count_hops == 0:
+        print("No links found, connection might be timed out")
+        exit(1)
+
     ping_info = ping(ip, n=10, ttl=64, size=64, sudo=sudo)
     print(ping_info)
     print("------------------------------------")
@@ -28,7 +34,7 @@ def route_info(ip: str, sudo):
         print("Route is correct")
     print(f"Hops to host: {count_hops}")
     output_to_file(ip, ping_info)
-    
+
     return count_hops
 
 
@@ -55,7 +61,6 @@ def get_rtt(ping_out: str):
     return rtt
 
 
-
 # traceroute command
 def traceroute(ip, sudo=False):
     if sudo:
@@ -72,9 +77,12 @@ def ping(ip, n, ttl, size, sudo):
         return run_command(['ping', '-c', str(n), '-t', str(ttl), '-s', str(size), ip])
 
 # net performance
+
+
 def run_netperf(ip: str, k_packets=20, TimeToLive=64, l_packets=64, sudo=False):
 
-    ping_info = ping(ip, n=k_packets, ttl=TimeToLive, size=l_packets, sudo=sudo)
+    ping_info = ping(ip, n=k_packets, ttl=TimeToLive,
+                     size=l_packets, sudo=sudo)
     rtt = get_rtt(ping_info)
 
     return rtt
@@ -94,7 +102,7 @@ def main(ip: str, steps: list):
     hops = route_info(ip, sudo=s)
     actual_hops = hops * 2
     print(f"Number of links crossed: {actual_hops}")
-    
+
     overall_performances = []
     for i in steps:
         print("++++++++++++++++++++++++++++++++++++++++++++")
