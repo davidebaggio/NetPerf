@@ -41,12 +41,12 @@ def coeff_a(steps, overall_performances):
     min_rtt = get_performance(overall_performances, steps)[0]
     min_s = [x/1000 for x in min_rtt] # convert from ms to s
     fit_s = np.polyfit(steps, min_s, 1)
-    return fit_s[0]
+    return fit_s
 
 
 # calculate S and S_b
 def calculate_throughput(steps, overall_performances, n_links):
     a = coeff_a(steps, overall_performances)
-    s = float(n_links) / a
-    s_b = 2 / a
-    return s, s_b
+    s = float(n_links) / a[0]
+    s_b = 2 / a[0]
+    return s, s_b, a[1]

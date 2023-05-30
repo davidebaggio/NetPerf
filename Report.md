@@ -46,25 +46,25 @@ Considering:
 
 * Finding total hops -->
 
-  - (Linux):
+  - Linux:
     - command **ping** with params: _'-c 1'_ to send only 1 packet, _'-t n'_ to set max TTL to value _n_ and _'-s 1'_ to set packet size to 1 byte
     - command **traceroute** to verify the correct links crossed during the **ping**
-  - (Windows):
+  - Windows:
     - command **ping** with params: _'-n 1'_ to send only 1 packet, _'-i n'_ to set max TTL to value _n_ and _'-l 1'_ to set packet size to 1 byte
     - command **tracert** to verify the correct links crossed during the **ping**
 
 * Default **ping** to save output to _.txt_ -->
 
-  - (Linux):
+  - Linux:
     - command **ping** with params: _'-c 10'_ to send 10 packets, _'-t 64'_ to set max TTL to value _64_ and _'-s 64'_ to set packet size to 64 bytes
-  - (Windows):
+  - Windows:
     - command **ping** with params: _'-n 10'_ to send 10 packets, _'-i 64'_ to set max TTL to value _64_ and _'-l 64'_ to set packet size to 64 bytes
 
 * **Ping** loop to get the network stats -->
   - Set a list of steps of bytes starting from 64 up to 1472 with steps of 16 bytes.
-  - (Linux):
+  - Linux:
     - command **ping** with params: _'-c 20'_ to send 20 packets, _'-t 64'_ to set max TTL to default value _64_ and _'-s steps[i]'_ to set packet size to _steps[i]_ bytes
-  - (Windows):
+  - Windows:
     - command **ping** with params: _'-n 20'_ to send 20 packets, _'-i 64'_ to set max TTL to default value _64_ and _'-l steps[i]'_ to set packet size to _steps[i]_ bytes
 
 ```console
@@ -148,7 +148,9 @@ $ Running command: sudo ping -c 20 -t 64 -s 64 5.180.211.133
 In the previous example the number of links crossed is 32, and it is verified by the _traceroute_ or _tracert_ command.
 The RTT data collected from the last part of the program is displayable in these graphs:
 
-![Overall performances](./performance.png)
+![Overall performances](./performance_linux.png "Linux")
+
+![Overall performances](./performance_windows.png "Windows")
 
 From min-RTT graph we can use the **numpy.polyfit** method to get the slope of the function. We can call this coefficient _'a'_ (notice that _'a'_ has to be converted from _ms/bit_ to _s/bit_).
 This slope is used to estimate the value of the _throughput_ and the _throughput bottleneck_ with the following formulas:
@@ -158,6 +160,15 @@ $$ S\\_{bottleneck} = \frac{2}{a} $$
 
 In this specific example the value of the throughputs are:
 
-$$ S = 643855285.0713756 \: bits/s $$
+- Linux:
+  $$ S = 17866043.622162588 \: bits/s $$
 
-$$ S_b= 32192764.25356878 \: bits/s $$
+  $$ S_b = 1488836.968513549 \: bits/s $$
+
+- Windows:
+  $$ S = 45018208.65862302 \: bits/s $$
+
+  $$ S_b = 1875758.6941092925 \: bits/s $$
+
+What the results show is that, in the same network for this specific hostname, windows performs better overall. This is probably achieved by some OS limitations in Linux.
+In any case we can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately _0s_. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets need to return through the same route).

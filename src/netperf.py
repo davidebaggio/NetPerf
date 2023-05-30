@@ -38,7 +38,8 @@ if __name__ == "__main__":
         steps[i] = (steps[i] + 28) * 8
     
     calculation.plot_all(steps, overall_performances)
-    s, s_b = calculation.calculate_throughput(steps, overall_performances, actual_hops)
+    s, s_b, t = calculation.calculate_throughput(steps, overall_performances, actual_hops)
     
     print(f"Throughput: {s} bits/s")
     print(f"Throughput Bottleneck: {s_b} bits/s")
+    print(f"Time of propagation: {t} ms")
