@@ -1,2 +1,6 @@
 Throughput: 643855285.0713756 bits/s
 Throughput Bottleneck: 32192764.25356878 bits/s
+
+
+Throughput: 45018208.65862302 bits/s
+Throughput Bottleneck: 1875758.6941092925 bits/s

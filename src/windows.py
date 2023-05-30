@@ -5,6 +5,8 @@ import statistics
 import calculation
 
 # print info
+
+
 def route_info(ip: str):
     print("-------------Finding amount of hops to the host-------------")
     count_hops = 30
@@ -16,11 +18,11 @@ def route_info(ip: str):
             count_hops += 1
             break
     print("------------------------------------------------------------")
-    
+
     ping_info = ping(ip, n=10, ttl=64, size=64)
     print(ping_info)
     print("------------------------------------")
-    
+
     trace = tracert(ip)
     print(trace)
     print("------------------------------------")
@@ -29,13 +31,18 @@ def route_info(ip: str):
     if length == 30:
         print("Max hops reached, Connection might be timed out")
         exit(1)
-    
+
     if count_hops == length:
         print("Route is correct")
     print(f"Hops to host: {count_hops}")
     output_to_file(ip, ping_info)
 
+    return count_hops
+
+
 # get rtt
+
+
 def get_rtt(ping_out: str):
     rttLine = get_lines(ping_out)[-1].split(',')
     rtt = []
@@ -65,7 +72,7 @@ def get_stdev(out: str):
 
 # net performance
 def run_netperf(ip: str, k_packets=10, TimeToLive=64, l_packets=64, info=False):
-    
+
     ping_info = ping(ip, n=k_packets, ttl=TimeToLive, size=l_packets)
     rtt = get_rtt(ping_info)
     rtt.append(get_stdev(ping_info))
@@ -74,13 +81,13 @@ def run_netperf(ip: str, k_packets=10, TimeToLive=64, l_packets=64, info=False):
 
 
 def main(ip: str, steps: list):
-    
+
     hops = route_info(ip)
     actual_hops = hops * 2
     print(f"Number of links crossed: {actual_hops}")
-    
+
     overall_performances = []
-    
+
     for i in steps:
         print("++++++++++++++++++++++++++++++++++++++++++++")
         print(f"Running netperf with packets of size {i * 8} bits")
