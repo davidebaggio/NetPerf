@@ -14,6 +14,8 @@ This project is written in python because this language provides useful modules 
 Having [GNU Make](https://www.gnu.org/software/make/) for building projects will simplify the execution of the program. Otherwise it is possible to run the program manually.
 This project requires some modules as previously stated. First of all [pip](https://www.python.org/downloads/) module installer for python needs to be installed and added to the PATH. On linux if you have python already install type `sudo apt install python3-pip`.
 
+For windows [psping](https://learn.microsoft.com/en-us/sysinternals/downloads/psping#installation) is required.
+
 #### With Make
 
 ```console
@@ -36,7 +38,7 @@ $ mkdir output
 $ python3 -B ./src/netperf.py
 ```
 
-Once the program is running, it will ask to insert the hostname of which the **ping** command is going to run (notice that you can skip this input by simply pressing _Enter_ and the default hostname will be _"lon.speedtest.clouvider.net"_) and if you are in linux it will ask also to decide whether the user wants to run the commands in _sudo_ mode. In windows it is better practise to open the terminal in administrator mode in order to solve authorization problems. Then the program will run some ping commands in sequence and the traceroute command (tracert for windows) to find the correct amount of links crossed. Another ping command is prompted in order to save the output. At the end the program will loop other ping commands with increasing payload of packets each iteration up to 1472 bytes and steps of 16 bytes (number of packets sent is 20 each time). The last part of the program could take more than 10 minutes because the **ping** command is a time consuming process expecially if used for 90 iterations.
+Once the program is running, it will ask to insert the hostname of which the **ping** command is going to run (notice that you can skip this input by simply pressing _Enter_ and the default hostname will be _"lon.speedtest.clouvider.net"_) and if you are in linux it will ask also to decide whether the user wants to run the commands in _sudo_ mode. In windows it is better practise to open the terminal in administrator mode in order to solve authorization problems. Then the program will run some ping commands in sequence and the traceroute command (tracert for windows) to find the correct amount of links crossed. Another ping command is prompted in order to save the output. At the end the program will loop other ping commands with increasing payload of packets each iteration up to 1472 bytes and steps of 16 bytes (number of packets sent is 20 each time). The last part of the program could take more than 10 minutes because the **ping** command is a time consuming process expecially if used for 90 iterations. In windows **psping** remove this time issue.
 
 ### Example NetPerf
 
@@ -65,21 +67,24 @@ Considering:
   - Linux:
     - command **ping** with params: _'-c 20'_ to send 20 packets, _'-t 64'_ to set max TTL to default value _64_ and _'-s steps[i]'_ to set packet size to _steps[i]_ bytes
   - Windows:
-    - command **ping** with params: _'-n 20'_ to send 20 packets, _'-i 64'_ to set max TTL to default value _64_ and _'-l steps[i]'_ to set packet size to _steps[i]_ bytes
+    - command **ping** with params: _'-n 20'_ to send 20 packets, _'-i 0'_ to set waiting time to _0_ and _'-l steps[i]'_ to set packet size to _steps[i]_ bytes
+
+LINUX
 
 ```console
 $ make exe
 
 $ if [ ! -d "./output" ]; then mkdir output; fi
 $ python3 -B ./src/netperf.py
-$ Insert hostname, skip by pressing enter. The default hostname is 'lon.speedtest.clouvider.net'
+$ Insert hostname, skip by pressing enter. The default hostname is
+$ 'lon.speedtest.clouvider.net'
 $ --> lon.speedtest.clouvider.net
 $ IP: 5.180.211.133
 $ Sudo (Y/N) Y			// this input is present only in linux
 
 $-------------Finding amount of hops to the host-------------
 $ Running command: sudo ping -c 1 -t 30 -s 1 5.180.211.133
-$ [sudo] password for 'user':
+$ [sudo] password for dave:
 $ Running command: sudo ping -c 1 -t 29 -s 1 5.180.211.133
 $ Running command: sudo ping -c 1 -t 28 -s 1 5.180.211.133
 $ Running command: sudo ping -c 1 -t 27 -s 1 5.180.211.133
@@ -91,51 +96,50 @@ $ Running command: sudo ping -c 1 -t 22 -s 1 5.180.211.133
 $ Running command: sudo ping -c 1 -t 21 -s 1 5.180.211.133
 $ Running command: sudo ping -c 1 -t 20 -s 1 5.180.211.133
 $ Running command: sudo ping -c 1 -t 19 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 18 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 17 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 16 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 15 -s 1 5.180.211.133
 $ ------------------------------------------------------------
 $ Running command: sudo ping -c 10 -t 64 -s 64 5.180.211.133
 $ PING 5.180.211.133 (5.180.211.133) 64(92) bytes of data.
-$ 72 bytes from 5.180.211.133: icmp_seq=1 ttl=48 time=246 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=2 ttl=48 time=63.4 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=3 ttl=48 time=291 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=4 ttl=48 time=35.7 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=5 ttl=48 time=131 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=6 ttl=48 time=154 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=7 ttl=48 time=77.8 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=8 ttl=48 time=96.2 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=9 ttl=48 time=124 ms
-$ 72 bytes from 5.180.211.133: icmp_seq=10 ttl=48 time=246 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=1 ttl=54 time=89.9 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=2 ttl=54 time=112 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=3 ttl=54 time=36.7 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=4 ttl=54 time=53.2 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=5 ttl=54 time=73.9 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=6 ttl=54 time=55.4 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=7 ttl=54 time=118 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=8 ttl=54 time=100 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=9 ttl=54 time=60.4 ms
+$ 72 bytes from 5.180.211.133: icmp_seq=10 ttl=54 time=81.7 ms
 $
 $ --- 5.180.211.133 ping statistics ---
-$ 10 packets transmitted, 10 received, 0% packet loss, time 9012ms
-$ rtt min/avg/max/mdev = 35.674/146.554/290.887/82.453 ms
+$ 10 packets transmitted, 10 received, 0% packet loss, time 9019ms
+$ rtt min/avg/max/mdev = 36.665/78.131/118.235/25.639 ms
 $ ------------------------------------
 $ Running command: traceroute 5.180.211.133
 $ traceroute to 5.180.211.133 (5.180.211.133), 30 hops max, 60 byte packets
-$  1  10.5.24.1 (10.5.24.1)  96.116 ms  96.081 ms  96.072 ms
-$  2  147.162.214.178 (147.162.214.178)  100.195 ms  100.185 ms  96.367 ms
-$  3  147.162.238.17 (147.162.238.17)  92.211 ms  92.200 ms  96.331 ms
-$  4  147.162.28.22 (147.162.28.22)  95.984 ms  95.973 ms  95.963 ms
-$  5  ru-unipd-rt-pd1.pd1.garr.net (193.206.132.221)  96.261 ms  95.941 ms  96.240 ms
-$  6  rl1-pd01-rs1-pd02.pd02.garr.net (185.191.181.15)  96.229 ms 185.191.181.12 (185.191.181.12)  101.359 ms  101.313 ms
-$  7  rs1-pd02-rs1-bo01.bo01.garr.net (185.191.181.17)  99.165 ms  99.144 ms  99.126 ms
-$  8  rs1-bo01-re1-mi02.mi02.garr.net (185.191.180.57)  99.115 ms rs1-mi01-re1-mi02.mi02.garr.net (185.191.180.158)  99.105 ms rs1-bo01-re1-mi02.mi02.garr.net (185.191.180.57)  99.094 ms
-$  9  mno-b3-link.ip.twelve99.net (80.239.135.52)  99.084 ms  14.781 ms  14.762 ms
-$ 10  prs-bb2-link.ip.twelve99.net (62.115.116.168)  209.166 ms  209.155 ms  209.144 ms
-$ 11  ldn-bb2-link.ip.twelve99.net (62.115.133.238)  209.133 ms  209.121 ms *
-$ 12  ldn-b3-link.ip.twelve99.net (62.115.122.181)  209.098 ms  190.214 ms  190.215 ms
-$ 13  clouvider-ic-337427.ip.twelve99-cust.net (62.115.154.43)  190.186 ms  190.159 ms  190.130 ms
-$ 14  h185-42-222-17.reverse.clouvider.net (185.42.222.17)  190.104 ms  190.078 ms  189.992 ms
-$ 15  185.245.80.45 (185.245.80.45)  189.961 ms  80.139 ms  80.092 ms
-$ 16  5.180.211.133 (5.180.211.133)  80.062 ms *  80.008 ms
+$  1  myfastgate.lan (192.168.1.254)  4.492 ms  4.456 ms  4.445 ms
+$  2  10.5.3.124 (10.5.3.124)  28.441 ms  16.458 ms  28.402 ms
+$  3  10.5.105.106 (10.5.105.106)  12.125 ms  12.372 ms  16.415 ms
+$  4  10.250.137.205 (10.250.137.205)  16.405 ms 10.250.137.201 (10.250.137.201)  16.394 ms  16.384 ms
+$  5  10.254.20.41 (10.254.20.41)  23.915 ms  23.905 ms 10.254.20.45 (10.254.20.45)  37.013 ms
+$  6  93-63-100-105.ip27.fastwebnet.it (93.63.100.105)  23.884 ms 93-63-100-113.ip27.fastwebnet.it (93.63.100.113)  15.351 ms 93-63-100-61.ip27.fastwebnet.it (93.63.100.61)  15.315 ms
+$  7  93-63-100-141.ip27.fastwebnet.it (93.63.100.141)  15.298 ms  20.303 ms 93-63-100-145.ip27.fastwebnet.it (93.63.100.145)  15.481 ms
+$  8  i63lgv-005-ae5.bb.ip-plus.net (193.5.122.134)  16.955 ms  16.939 ms  20.570 ms
+$  9  i71lzw-015-ae4.bb.ip-plus.net (138.187.129.162)  20.561 ms  20.550 ms  17.244 ms
+$ 10  i79zhh-005-ae21.bb.ip-plus.net (138.187.129.75)  17.214 ms  17.203 ms  40.430 ms
+$ 11  i79tix-025-ae10.bb.ip-plus.net (138.187.129.174)  40.399 ms  40.382 ms  40.342 ms
+$ 12  100ge0-35.core2.zrh3.he.net (72.52.92.130)  40.323 ms  102.601 ms  102.558 ms
+$ 13  100ge0-35.core2.gva1.he.net (184.104.193.134)  102.537 ms  102.512 ms *
+$ 14  * * *
+$ 15  linx-lon1.thn2.peering.clouvider.net (195.66.227.14)  101.388 ms  101.343 ms  101.322 ms
+$ 16  * * *
+$ 17  h185-42-222-17.reverse.clouvider.net (185.42.222.17)  102.647 ms  102.628 ms *
+$ 18  185.245.80.45 (185.245.80.45)  102.521 ms  102.503 ms  102.485 ms
+$ 19  185.245.80.1 (185.245.80.1)  98.261 ms  63.026 ms  62.979 ms
+$ 20  5.180.211.133 (5.180.211.133)  62.960 ms  62.941 ms 194.35.234.205 (194.35.234.205)  62.917 ms
 $ ------------------------------------
 $ Route is correct
-$ Hops to host: 16
-$ Number of links crossed: 32
-
+$ Hops to host: 20
+$ Number of links crossed: 40
 $ ++++++++++++++++++++++++++++++++++++++++++++
 $ Running netperf with packets of size 512 bits
 $ Running command: sudo ping -c 20 -t 64 -s 64 5.180.211.133
@@ -148,8 +152,10 @@ $ Running command: sudo ping -c 20 -t 64 -s 64 5.180.211.133
 In the previous example the number of links crossed is 32, and it is verified by the _traceroute_ or _tracert_ command.
 The RTT data collected from the last part of the program is displayable in these graphs:
 
+Linux:
 ![Overall performances](./performance_linux.png "Linux")
 
+Windows:
 ![Overall performances](./performance_windows.png "Windows")
 
 From min-RTT graph we can use the **numpy.polyfit** method to get the slope of the function. We can call this coefficient _'a'_ (notice that _'a'_ has to be converted from _ms/bit_ to _s/bit_).
@@ -161,13 +167,23 @@ $$ S\\_{bottleneck} = \frac{2}{a} $$
 In this specific example the value of the throughputs are:
 
 - Linux:
-  $$ S = 17866043.622162588 \: bits/s $$
+  $$ S = 590440329.6 \: bits/s $$
 
-  $$ S_b = 1488836.968513549 \: bits/s $$
+  $$ S_b = 33222016.48 \: bits/s $$
 
 - Windows:
-  $$ S = 45018208.65862302 \: bits/s $$
+  $$ S = 578657266.07 \: bits/s $$
 
-  $$ S_b = 1875758.6941092925 \: bits/s $$
+  $$ S_b = 32147625.89 \: bits/s $$
+
+With **numpy.polyfit** we can also calculate the time of propagation _T_ of the signal through the links.
+
+- Linux:
+  $$ T = 38.55 \: ms $$
+
+- Windows:
+  $$ T = 36.32 \: ms $$
 
 We can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately _0s_. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets need to return through the same route).
+
+The time of propagation does not depend from the network speed but from the actual speed of the propagation of the signal, so it is governed by physics laws that prevents the signal from being faster than speed of light. If we ping to an host located in America the minimum time of propagation is around _120 ms_, otherwise if we ping to an host located in Europe the _T_ can be close to _30 ms_. Notice that this time depends on the type of connection, wired connection performs better.
