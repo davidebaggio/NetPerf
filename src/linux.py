@@ -7,7 +7,7 @@ import pingparsing as pp
 
 def route_info(ip: str, sudo):
     print("-------------Finding amount of hops to the host-------------")
-    count_hops = 64
+    count_hops = 30
     while count_hops > 0:
         try:
             ping(ip, n=1, ttl=count_hops, size=1, sudo=sudo)

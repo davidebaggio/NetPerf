@@ -9,7 +9,7 @@ import calculation
 
 def route_info(ip: str):
     print("-------------Finding amount of hops to the host-------------")
-    count_hops = 64
+    count_hops = 30
     while count_hops > 0:
         try:
             ping(ip, n=1, ttl=count_hops, size=1)
@@ -65,18 +65,23 @@ def ping(ip, n, ttl, size):
     return run_command(['ping', '-n', str(n), '-i', str(ttl), '-l', str(size), ip])
 
 
+# psping command
+def psping(ip, n, size):
+    return run_command(['psping', '-n', str(n), '-i', '0', '-l', str(size), ip])
+
+
 # get stdev
 def get_stdev(out: str):
-    round_trip_times = re.findall(r"=(\d+)ms", out)
-    round_trip_times = list(map(int, round_trip_times))
+    round_trip_times = re.findall(r": (\d+\.\d+)ms", out)
+    round_trip_times = list(map(float, round_trip_times))
     stdev = statistics.pstdev(round_trip_times)
     return stdev
 
 
 # net performance
-def run_netperf(ip: str, k_packets=20, TimeToLive=64, l_packets=64, info=False):
+def run_netperf(ip: str, k_packets=20, l_packets=64):
 
-    ping_info = ping(ip, n=k_packets, ttl=TimeToLive, size=l_packets)
+    ping_info = psping(ip, n=k_packets, size=l_packets)
     rtt = get_rtt(ping_info)
     rtt.append(get_stdev(ping_info))
 

@@ -3,7 +3,8 @@ Throughput: 17866043.622162588 bits/s
 Throughput Bottleneck: 1488836.968513549 bits/s
 
 Windows
-Throughput: 45018208.65862302 bits/s
-Throughput Bottleneck: 1875758.6941092925 bits/s
+Throughput: 578657266.07 bits/s
+Throughput Bottleneck: 32147625.89 bits/s
+Time of propagation: 36.32 ms
 
 

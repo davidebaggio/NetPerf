@@ -170,5 +170,4 @@ In this specific example the value of the throughputs are:
 
   $$ S_b = 1875758.6941092925 \: bits/s $$
 
-What the results show is that, in the same network for this specific hostname, windows performs better overall. This is probably achieved by some OS limitations in Linux.
-In any case we can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately _0s_. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets need to return through the same route).
+We can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately _0s_. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets need to return through the same route).
