@@ -72,9 +72,9 @@ def traceroute(ip, sudo=False):
 # ping command
 def ping(ip, n, ttl, size, sudo):
     if sudo:
-        return run_command(['sudo', 'ping', '-c', str(n), '-t', str(ttl), '-s', str(size), ip])
+        return run_command(['sudo', 'ping', '-i', '0.01', '-c', str(n), '-t', str(ttl), '-s', str(size), ip])
     else:
-        return run_command(['ping', '-c', str(n), '-t', str(ttl), '-s', str(size), ip])
+        return run_command(['ping', '-i', '0.01', '-c', str(n), '-t', str(ttl), '-s', str(size), ip])
 
 # net performance
 

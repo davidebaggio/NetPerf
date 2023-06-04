@@ -57,7 +57,7 @@ def get_rtt(ping_out: str):
 
 # tracert command
 def tracert(ip):
-    return run_command(['tracert', ip])
+    return run_command(['tracert', '-d', ip])
 
 
 # ping command
@@ -74,6 +74,8 @@ def psping(ip, n, size):
 def get_stdev(out: str):
     round_trip_times = re.findall(r": (\d+\.\d+)ms", out)
     round_trip_times = list(map(float, round_trip_times))
+    # print(out)
+    # print(round_trip_times)
     stdev = statistics.pstdev(round_trip_times)
     return stdev
 
