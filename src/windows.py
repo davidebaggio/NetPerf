@@ -74,14 +74,12 @@ def psping(ip, n, size):
 def get_stdev(out: str):
     round_trip_times = re.findall(r": (\d+\.\d+)ms", out)
     round_trip_times = list(map(float, round_trip_times))
-    # print(out)
-    # print(round_trip_times)
     stdev = statistics.pstdev(round_trip_times)
     return stdev
 
 
 # net performance
-def run_netperf(ip: str, k_packets=20, l_packets=64):
+def run_netperf(ip: str, k_packets=40, l_packets=64):
 
     ping_info = psping(ip, n=k_packets, size=l_packets)
     rtt = get_rtt(ping_info)

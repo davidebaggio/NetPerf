@@ -79,10 +79,9 @@ def ping(ip, n, ttl, size, sudo):
 # net performance
 
 
-def run_netperf(ip: str, k_packets=20, TimeToLive=64, l_packets=64, sudo=False):
+def run_netperf(ip: str, k_packets=40, TimeToLive=64, l_packets=64, sudo=False):
 
-    ping_info = ping(ip, n=k_packets, ttl=TimeToLive,
-                     size=l_packets, sudo=sudo)
+    ping_info = ping(ip, n=k_packets, ttl=TimeToLive, size=l_packets, sudo=sudo)
     rtt = get_rtt(ping_info)
 
     return rtt

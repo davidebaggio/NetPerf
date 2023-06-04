@@ -1,7 +1,7 @@
 Linux
-Throughput: 590440329.6 bits/s
-Throughput Bottleneck: 33222016.48 bits/s
-Time of propagation: 38.55 ms
+Throughput: 461975685.89 bits/s
+Throughput Bottleneck: 23098784.29 bits/s
+Time of propagation: 35.02 ms
 
 Windows
 Throughput: 566320626.81 bits/s

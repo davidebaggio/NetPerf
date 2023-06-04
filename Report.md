@@ -38,7 +38,7 @@ $ mkdir output
 $ python3 -B ./src/netperf.py
 ```
 
-Once the program is running, it will ask to insert the hostname of which the **ping** command is going to run (notice that you can skip this input by simply pressing _Enter_ and the default hostname will be _"lon.speedtest.clouvider.net"_) and if you are in linux it will ask also to decide whether the user wants to run the commands in _sudo_ mode. In windows it is better practise to open the terminal in administrator mode in order to solve authorization problems. Then the program will run some ping commands in sequence and the traceroute command (tracert for windows) to find the correct amount of links crossed. Another ping command is prompted in order to save the output. At the end the program will loop other ping commands with increasing payload of packets each iteration up to 1472 bytes and steps of 16 bytes (number of packets sent is 20 each time). The last part of the program could take more than 10 minutes because the **ping** command is a time consuming process expecially if used for 90 iterations. In windows **psping** remove this time issue.
+Once the program is running, it will ask to insert the hostname of which the **ping** command is going to run (notice that you can skip this input by simply pressing _Enter_ and the default hostname will be _"lon.speedtest.clouvider.net"_) and if you are in linux it will ask also to decide whether the user wants to run the commands in _sudo_ mode. In windows it is better practise to open the terminal in administrator mode in order to solve authorization problems. Then the program will run some ping commands in sequence and the traceroute command (tracert for windows) to find the correct amount of links crossed. Another ping command is prompted in order to save the output. At the end the program will loop other ping commands with increasing payload of packets each iteration up to 1472 bytes and steps of 16 bytes (number of packets sent is 40 each time).
 
 ### Example NetPerf
 
@@ -49,7 +49,7 @@ Considering:
 * Finding total hops -->
 
   - Linux:
-    - command **ping** with params: _'-c 1'_ to send only 1 packet, _'-t n'_ to set max TTL to value _n_ and _'-s 1'_ to set packet size to 1 byte
+    - command **ping** with params: _'-i 0.01'_ to set waiting time to 0.01s, _'-c 1'_ to send only 1 packet, _'-t n'_ to set max TTL to value _n_ and _'-s 1'_ to set packet size to 1 byte
     - command **traceroute** to verify the correct links crossed during the **ping**
   - Windows:
     - command **ping** with params: _'-n 1'_ to send only 1 packet, _'-i n'_ to set max TTL to value _n_ and _'-l 1'_ to set packet size to 1 byte
@@ -58,23 +58,22 @@ Considering:
 * Default **ping** to save output to _.txt_ -->
 
   - Linux:
-    - command **ping** with params: _'-c 10'_ to send 10 packets, _'-t 64'_ to set max TTL to value _64_ and _'-s 64'_ to set packet size to 64 bytes
+    - command **ping** with params: _'-i 0.01'_ to set waiting time to 0.01s, _'-c 10'_ to send 10 packets, _'-t 64'_ to set max TTL to value _64_ and _'-s 64'_ to set packet size to 64 bytes
   - Windows:
     - command **ping** with params: _'-n 10'_ to send 10 packets, _'-i 64'_ to set max TTL to value _64_ and _'-l 64'_ to set packet size to 64 bytes
 
 * **Ping** loop to get the network stats -->
   - Set a list of steps of bytes starting from 64 up to 1472 with steps of 16 bytes.
   - Linux:
-    - command **ping** with params: _'-c 20'_ to send 20 packets, _'-t 64'_ to set max TTL to default value _64_ and _'-s steps[i]'_ to set packet size to _steps[i]_ bytes
+    - command **ping** with params: _'-i 0.01'_ to set waiting time to 0.01s, _'-c 40'_ to send 40 packets, _'-t 64'_ to set max TTL to default value _64_ and _'-s steps[i]'_ to set packet size to _steps[i]_ bytes
   - Windows:
-    - command **ping** with params: _'-n 20'_ to send 20 packets, _'-i 0'_ to set waiting time to _0_ and _'-l steps[i]'_ to set packet size to _steps[i]_ bytes
+    - command **psping** with params: _'-n 40'_ to send 40 packets, _'-i 0'_ to set waiting time to _0_ and _'-l steps[i]'_ to set packet size to _steps[i]_ bytes
 
 LINUX
 
 ```console
 $ make exe
 
-$ if [ ! -d "./output" ]; then mkdir output; fi
 $ python3 -B ./src/netperf.py
 $ Insert hostname, skip by pressing enter. The default hostname is
 $ 'lon.speedtest.clouvider.net'
@@ -85,17 +84,17 @@ $ Sudo (Y/N) Y			// this input is present only in linux
 $-------------Finding amount of hops to the host-------------
 $ Running command: sudo ping -c 1 -t 30 -s 1 5.180.211.133
 $ [sudo] password for dave:
-$ Running command: sudo ping -c 1 -t 29 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 28 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 27 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 26 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 25 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 24 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 23 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 22 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 21 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 20 -s 1 5.180.211.133
-$ Running command: sudo ping -c 1 -t 19 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 29 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 28 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 27 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 26 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 25 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 24 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 23 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 22 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 21 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 20 -s 1 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 1 -t 19 -s 1 5.180.211.133
 $ ------------------------------------------------------------
 $ Running command: sudo ping -c 10 -t 64 -s 64 5.180.211.133
 $ PING 5.180.211.133 (5.180.211.133) 64(92) bytes of data.
@@ -142,7 +141,7 @@ $ Hops to host: 20
 $ Number of links crossed: 40
 $ ++++++++++++++++++++++++++++++++++++++++++++
 $ Running netperf with packets of size 512 bits
-$ Running command: sudo ping -c 20 -t 64 -s 64 5.180.211.133
+$ Running command: sudo ping -i 0.01 -c 40 -t 64 -s 64 5.180.211.133
 
 	// ... iteration of the ping command to get the network stats
 ```
