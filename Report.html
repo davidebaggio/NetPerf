@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
-<link rel="stylesheet" href="file:////home/dave/.vscode/extensions/goessner.mdmath-2.7.4/themes/default/style.css">
+<link rel="stylesheet" href="file:///c:\Users\david\.vscode\extensions\goessner.mdmath-2.7.4\themes\default\style.css">
 
 </head>
 <body class="markdown-body">
@@ -35,70 +35,113 @@ $ </span><span class="language-bash">make all</span>
 <span class="hljs-meta">$ </span><span class="language-bash">python3 -m pip install matplotlib</span>
 <span class="hljs-meta">$ </span><span class="language-bash">python3 -m pip install numpy</span>
 <span class="hljs-meta">
-$ </span><span class="language-bash"><span class="hljs-built_in">mkdir</span> output</span>
-<span class="hljs-meta">$ </span><span class="language-bash">python3 -B ./src/netperf.py</span>
+$ </span><span class="language-bash">python3 -B ./src/netperf.py</span>
 </div></code></pre>
-<p dir="auto">Once the program is running, it will ask to insert the hostname of which the <strong>ping</strong> command is going to run (notice that you can skip this input by simply pressing <em>Enter</em> and the default hostname will be <em>&quot;lon.speedtest.clouvider.net&quot;</em>) and if you are in linux it will ask also to decide whether the user wants to run the commands in <em>sudo</em> mode. In windows it is better practise to open the terminal in administrator mode in order to solve authorization problems. Then the program will run some ping commands in sequence and the traceroute command (tracert for windows) to find the correct amount of links crossed. Another ping command is prompted in order to save the output. At the end the program will loop other ping commands with increasing payload of packets each iteration up to 1472 bytes and steps of 16 bytes (number of packets sent is 20 each time). The last part of the program could take more than 10 minutes because the <strong>ping</strong> command is a time consuming process expecially if used for 90 iterations. In windows <strong>psping</strong> remove this time issue.</p>
+<p dir="auto">Once the program is running, it will ask to insert the hostname of which the <strong>ping</strong> command is going to run (notice that you can skip this input by simply pressing <em>Enter</em> and the default hostname will be <em>&quot;lon.speedtest.clouvider.net&quot;</em>) and if you are in linux it will ask also to decide whether the user wants to run the commands in <em>sudo</em> mode. In windows it is better practise to open the terminal in administrator mode in order to solve authorization problems. Then the program will run some ping commands in sequence and the traceroute command (tracert for windows) to find the correct amount of links crossed. Another ping command is prompted in order to save the output. At the end the program will loop other ping commands with increasing payload of packets each iteration up to 1472 bytes and steps of 16 bytes (number of packets sent is 40 each time).</p>
 <h3 dir="auto" id="example-netperf">Example NetPerf</h3>
 <p dir="auto">Considering:</p>
 <ul dir="auto">
 <li dir="auto">hostname = 'lon.speedtest.clouvider.net'</li>
 </ul>
-<ul dir="auto">
-<li dir="auto">
-<p dir="auto">Finding total hops --&gt;</p>
-<ul dir="auto">
-<li dir="auto">Linux:
-<ul dir="auto">
-<li dir="auto">command <strong>ping</strong> with params: <em>'-c 1'</em> to send only 1 packet, <em>'-t n'</em> to set max TTL to value <em>n</em> and <em>'-s 1'</em> to set packet size to 1 byte</li>
-<li dir="auto">command <strong>traceroute</strong> to verify the correct links crossed during the <strong>ping</strong></li>
-</ul>
-</li>
-<li dir="auto">Windows:
-<ul dir="auto">
-<li dir="auto">command <strong>ping</strong> with params: <em>'-n 1'</em> to send only 1 packet, <em>'-i n'</em> to set max TTL to value <em>n</em> and <em>'-l 1'</em> to set packet size to 1 byte</li>
-<li dir="auto">command <strong>tracert</strong> to verify the correct links crossed during the <strong>ping</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li dir="auto">
-<p dir="auto">Default <strong>ping</strong> to save output to <em>.txt</em> --&gt;</p>
-<ul dir="auto">
-<li dir="auto">Linux:
-<ul dir="auto">
-<li dir="auto">command <strong>ping</strong> with params: <em>'-c 10'</em> to send 10 packets, <em>'-t 64'</em> to set max TTL to value <em>64</em> and <em>'-s 64'</em> to set packet size to 64 bytes</li>
-</ul>
-</li>
-<li dir="auto">Windows:
-<ul dir="auto">
-<li dir="auto">command <strong>ping</strong> with params: <em>'-n 10'</em> to send 10 packets, <em>'-i 64'</em> to set max TTL to value <em>64</em> and <em>'-l 64'</em> to set packet size to 64 bytes</li>
-</ul>
-</li>
-</ul>
-</li>
-<li dir="auto">
-<p dir="auto"><strong>Ping</strong> loop to get the network stats --&gt;</p>
-<ul dir="auto">
-<li dir="auto">Set a list of steps of bytes starting from 64 up to 1472 with steps of 16 bytes.</li>
-<li dir="auto">Linux:
-<ul dir="auto">
-<li dir="auto">command <strong>ping</strong> with params: <em>'-c 20'</em> to send 20 packets, <em>'-t 64'</em> to set max TTL to default value <em>64</em> and <em>'-s steps[i]'</em> to set packet size to <em>steps[i]</em> bytes</li>
-</ul>
-</li>
-<li dir="auto">Windows:
-<ul dir="auto">
-<li dir="auto">command <strong>ping</strong> with params: <em>'-n 20'</em> to send 20 packets, <em>'-i 0'</em> to set waiting time to <em>0</em> and <em>'-l steps[i]'</em> to set packet size to <em>steps[i]</em> bytes</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<h5 dir="auto" id="linux">LINUX</h5>
+<table dir="auto">
+<thead dir="auto">
+<tr dir="auto">
+<th style="text-align:center">Usage</th>
+<th style="text-align:center">Command</th>
+<th style="text-align:center">Interval</th>
+<th style="text-align:center">Number of packs</th>
+<th style="text-align:center">TTL (Time To Live)</th>
+<th style="text-align:center">Size of packets</th>
+</tr>
+</thead>
+<tbody dir="auto">
+<tr dir="auto">
+<td style="text-align:center">Finding total hops</td>
+<td style="text-align:center">ping</td>
+<td style="text-align:center">-i 0.01</td>
+<td style="text-align:center">-c 1</td>
+<td style="text-align:center">-t n</td>
+<td style="text-align:center">-s 1</td>
+</tr>
+<tr dir="auto">
+<td style="text-align:center">Save the default output</td>
+<td style="text-align:center">ping</td>
+<td style="text-align:center">-i 0.01</td>
+<td style="text-align:center">-c 10</td>
+<td style="text-align:center">-t 64</td>
+<td style="text-align:center">-s 64</td>
+</tr>
+<tr dir="auto">
+<td style="text-align:center">Loop to get network stats</td>
+<td style="text-align:center">ping</td>
+<td style="text-align:center">-i 0.01</td>
+<td style="text-align:center">-c 40</td>
+<td style="text-align:center">-t 64</td>
+<td style="text-align:center">-s steps[i]</td>
+</tr>
+<tr dir="auto">
+<td style="text-align:center">Check the links</td>
+<td style="text-align:center">traceroute</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+</tr>
+</tbody>
+</table>
+<h5 dir="auto" id="windows">WINDOWS</h5>
+<table dir="auto">
+<thead dir="auto">
+<tr dir="auto">
+<th style="text-align:center">Usage</th>
+<th style="text-align:center">Command</th>
+<th style="text-align:center">Interval</th>
+<th style="text-align:center">Number of packs</th>
+<th style="text-align:center">TTL (Time To Live)</th>
+<th style="text-align:center">Size of packets</th>
+</tr>
+</thead>
+<tbody dir="auto">
+<tr dir="auto">
+<td style="text-align:center">Finding total hops</td>
+<td style="text-align:center">ping</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">-n 1</td>
+<td style="text-align:center">-i n</td>
+<td style="text-align:center">-l 1</td>
+</tr>
+<tr dir="auto">
+<td style="text-align:center">Save the default output</td>
+<td style="text-align:center">ping</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">-n 10</td>
+<td style="text-align:center">-i 64</td>
+<td style="text-align:center">-l 64</td>
+</tr>
+<tr dir="auto">
+<td style="text-align:center">Loop to get network stats</td>
+<td style="text-align:center">psping</td>
+<td style="text-align:center">-i 0</td>
+<td style="text-align:center">-n 40</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">-l steps[i]</td>
+</tr>
+<tr dir="auto">
+<td style="text-align:center">Check the links</td>
+<td style="text-align:center">tracert</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">/</td>
+</tr>
+</tbody>
+</table>
+<hr dir="auto">
 <p dir="auto">LINUX</p>
 <pre><code class="code-line language-console" dir="auto"><div><span class="hljs-meta">$ </span><span class="language-bash">make exe</span>
 <span class="hljs-meta">
-$ </span><span class="language-bash"><span class="hljs-keyword">if</span> [ ! -d <span class="hljs-string">&quot;./output&quot;</span> ]; <span class="hljs-keyword">then</span> <span class="hljs-built_in">mkdir</span> output; <span class="hljs-keyword">fi</span></span>
-<span class="hljs-meta">$ </span><span class="language-bash">python3 -B ./src/netperf.py</span>
+$ </span><span class="language-bash">python3 -B ./src/netperf.py</span>
 <span class="hljs-meta">$ </span><span class="language-bash">Insert hostname, skip by pressing enter. The default hostname is</span>
 <span class="hljs-meta">$ </span><span class="language-bash"><span class="hljs-string">&#x27;lon.speedtest.clouvider.net&#x27;</span></span>
 <span class="hljs-meta">$ </span><span class="language-bash">--&gt; lon.speedtest.clouvider.net</span>
@@ -108,17 +151,17 @@ $ </span><span class="language-bash"><span class="hljs-keyword">if</span> [ ! -d
 $</span><span class="language-bash">-------------Finding amount of hops to the host-------------</span>
 <span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 30 -s 1 5.180.211.133</span>
 <span class="hljs-meta">$ </span><span class="language-bash">[sudo] password <span class="hljs-keyword">for</span> dave:</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 29 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 28 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 27 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 26 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 25 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 24 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 23 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 22 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 21 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 20 -s 1 5.180.211.133</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 1 -t 19 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 29 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 28 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 27 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 26 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 25 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 24 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 23 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 22 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 21 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 20 -s 1 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 1 -t 19 -s 1 5.180.211.133</span>
 <span class="hljs-meta">$ </span><span class="language-bash">------------------------------------------------------------</span>
 <span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 10 -t 64 -s 64 5.180.211.133</span>
 <span class="hljs-meta">$ </span><span class="language-bash">PING 5.180.211.133 (5.180.211.133) 64(92) bytes of data.</span>
@@ -165,12 +208,12 @@ $ --- 5.180.211.133 ping statistics ---</span>
 <span class="hljs-meta">$ </span><span class="language-bash">Number of links crossed: 40</span>
 <span class="hljs-meta">$ </span><span class="language-bash">++++++++++++++++++++++++++++++++++++++++++++</span>
 <span class="hljs-meta">$ </span><span class="language-bash">Running netperf with packets of size 512 bits</span>
-<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -c 20 -t 64 -s 64 5.180.211.133</span>
+<span class="hljs-meta">$ </span><span class="language-bash">Running <span class="hljs-built_in">command</span>: sudo ping -i 0.01 -c 40 -t 64 -s 64 5.180.211.133</span>
 
 	// ... iteration of the ping command to get the network stats
 </div></code></pre>
 <h3 dir="auto" id="results">Results</h3>
-<p dir="auto">In the previous example the number of links crossed is 32, and it is verified by the <em>traceroute</em> or <em>tracert</em> command.
+<p dir="auto">In the previous example the number of links crossed is 40, and it is verified by the <em>traceroute</em> or <em>tracert</em> command.
 The RTT data collected from the last part of the program is displayable in these graphs:</p>
 <p dir="auto">Linux:
 <img src="./performance_linux.png" alt="Overall performances" title="Linux" data-src="./performance_linux.png"></p>
@@ -186,34 +229,34 @@ This slope is used to estimate the value of the <em>throughput</em> and the <em>
 <ul dir="auto">
 <li dir="auto">
 <p dir="auto">Linux:</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mn>590440329.6</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S = 590440329.6 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">590440329.6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mn>461975685.89</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S = 461975685.89 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">461975685.89</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
 </math>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>S</mi><mi>b</mi></msub><mo>=</mo><mn>33222016.48</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S_b = 33222016.48 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">33222016.48</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>S</mi><mi>b</mi></msub><mo>=</mo><mn>23098784.29</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S_b = 23098784.29 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">23098784.29</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
 </math>
 </li>
 <li dir="auto">
 <p dir="auto">Windows:</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mn>578657266.07</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S = 578657266.07 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">578657266.07</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mo>=</mo><mn>518583799.43</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S = 518583799.43 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">518583799.43</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
 </math>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>S</mi><mi>b</mi></msub><mo>=</mo><mn>32147625.89</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S_b = 32147625.89 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">32147625.89</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>S</mi><mi>b</mi></msub><mo>=</mo><mn>28810211.08</mn><mtext> </mtext><mi>b</mi><mi>i</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> S_b = 28810211.08 \: bits/s </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28810211.08</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">bi</span><span class="mord mathnormal">t</span><span class="mord mathnormal">s</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span></p>
 </math>
 </li>
 </ul>
-<p dir="auto">With <strong>numpy.polyfit</strong> we can also calculate the time of propagation <em>T</em> of the signal through the links.</p>
+<p dir="auto">We can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately <em>0s</em>. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets usually need to return through the same route).</p>
+<p dir="auto">With <strong>numpy.polyfit</strong> we can also estimate the time of propagation <em>T</em> of the signal through the links.</p>
 <ul dir="auto">
 <li dir="auto">
 <p dir="auto">Linux:</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>=</mo><mn>38.55</mn><mtext> </mtext><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> T = 38.55 \: ms </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">38.55</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>=</mo><mn>35.02</mn><mtext> </mtext><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> T = 35.02 \: ms </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">35.02</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span></p>
 </math>
 </li>
 <li dir="auto">
 <p dir="auto">Windows:</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>=</mo><mn>36.32</mn><mtext> </mtext><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> T = 36.32 \: ms </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">36.32</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>T</mi><mo>=</mo><mn>36.44</mn><mtext> </mtext><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex"> T = 36.44 \: ms </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">36.44</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></span></p>
 </math>
 </li>
 </ul>
-<p dir="auto">We can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately <em>0s</em>. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets need to return through the same route).</p>
-<p dir="auto">The time of propagation does not depend from the network speed but from the actual speed of the propagation of the signal, so it is governed by physics laws that prevents the signal from being faster than speed of light. If we ping to an host located in America the minimum time of propagation is around <em>120 ms</em>, otherwise if we ping to an host located in Europe the <em>T</em> can be close to <em>30 ms</em>. Notice that this time depends on the type of connection, wired connection performs better.</p>
+<p dir="auto">The time of propagation does not depend from the network speed but from the actual speed of the propagation of the signal, so it is governed by physics laws that prevents the signal from being faster than speed of light. If we ping to an host located in America the minimum time of propagation is around <em>120 ms</em>, otherwise if we ping to an host located in Europe the <em>T</em> can be close to <em>30 ms</em> or less. Notice that this time depends also on the type of connection, wired connection performs better.</p>
 
 </body>
 </html>

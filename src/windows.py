@@ -37,6 +37,8 @@ def route_info(ip: str):
 
     if count_hops == length:
         print("Route is correct")
+    else:
+        print("Some request timed out")
     print(f"Hops to host: {count_hops}")
     output_to_file(ip, ping_info)
 

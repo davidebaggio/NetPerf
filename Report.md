@@ -34,7 +34,6 @@ $ python3 -m pip install pingparsing
 $ python3 -m pip install matplotlib
 $ python3 -m pip install numpy
 
-$ mkdir output
 $ python3 -B ./src/netperf.py
 ```
 
@@ -46,28 +45,25 @@ Considering:
 
 - hostname = 'lon.speedtest.clouvider.net'
 
-* Finding total hops -->
+##### LINUX
 
-  - Linux:
-    - command **ping** with params: _'-i 0.01'_ to set waiting time to 0.01s, _'-c 1'_ to send only 1 packet, _'-t n'_ to set max TTL to value _n_ and _'-s 1'_ to set packet size to 1 byte
-    - command **traceroute** to verify the correct links crossed during the **ping**
-  - Windows:
-    - command **ping** with params: _'-n 1'_ to send only 1 packet, _'-i n'_ to set max TTL to value _n_ and _'-l 1'_ to set packet size to 1 byte
-    - command **tracert** to verify the correct links crossed during the **ping**
+|           Usage           |  Command   | Interval | Number of packs | TTL (Time To Live) | Size of packets |
+| :-----------------------: | :--------: | :------: | :-------------: | :----------------: | :-------------: |
+|    Finding total hops     |    ping    | -i 0.01  |      -c 1       |        -t n        |      -s 1       |
+|  Save the default output  |    ping    | -i 0.01  |      -c 10      |       -t 64        |      -s 64      |
+| Loop to get network stats |    ping    | -i 0.01  |      -c 40      |       -t 64        |   -s steps[i]   |
+|      Check the links      | traceroute |    /     |        /        |         /          |        /        |
 
-* Default **ping** to save output to _.txt_ -->
+##### WINDOWS
 
-  - Linux:
-    - command **ping** with params: _'-i 0.01'_ to set waiting time to 0.01s, _'-c 10'_ to send 10 packets, _'-t 64'_ to set max TTL to value _64_ and _'-s 64'_ to set packet size to 64 bytes
-  - Windows:
-    - command **ping** with params: _'-n 10'_ to send 10 packets, _'-i 64'_ to set max TTL to value _64_ and _'-l 64'_ to set packet size to 64 bytes
+|           Usage           | Command | Interval | Number of packs | TTL (Time To Live) | Size of packets |
+| :-----------------------: | :-----: | :------: | :-------------: | :----------------: | :-------------: |
+|    Finding total hops     |  ping   |    /     |      -n 1       |        -i n        |      -l 1       |
+|  Save the default output  |  ping   |    /     |      -n 10      |       -i 64        |      -l 64      |
+| Loop to get network stats | psping  |   -i 0   |      -n 40      |         /          |   -l steps[i]   |
+|      Check the links      | tracert |    /     |        /        |         /          |        /        |
 
-* **Ping** loop to get the network stats -->
-  - Set a list of steps of bytes starting from 64 up to 1472 with steps of 16 bytes.
-  - Linux:
-    - command **ping** with params: _'-i 0.01'_ to set waiting time to 0.01s, _'-c 40'_ to send 40 packets, _'-t 64'_ to set max TTL to default value _64_ and _'-s steps[i]'_ to set packet size to _steps[i]_ bytes
-  - Windows:
-    - command **psping** with params: _'-n 40'_ to send 40 packets, _'-i 0'_ to set waiting time to _0_ and _'-l steps[i]'_ to set packet size to _steps[i]_ bytes
+---
 
 LINUX
 
@@ -148,7 +144,7 @@ $ Running command: sudo ping -i 0.01 -c 40 -t 64 -s 64 5.180.211.133
 
 ### Results
 
-In the previous example the number of links crossed is 32, and it is verified by the _traceroute_ or _tracert_ command.
+In the previous example the number of links crossed is 40, and it is verified by the _traceroute_ or _tracert_ command.
 The RTT data collected from the last part of the program is displayable in these graphs:
 
 Linux:
@@ -166,23 +162,23 @@ $$ S\\_{bottleneck} = \frac{2}{a} $$
 In this specific example the value of the throughputs are:
 
 - Linux:
-  $$ S = 590440329.6 \: bits/s $$
+  $$ S = 461975685.89 \: bits/s $$
 
-  $$ S_b = 33222016.48 \: bits/s $$
+  $$ S_b = 23098784.29 \: bits/s $$
 
 - Windows:
-  $$ S = 578657266.07 \: bits/s $$
+  $$ S = 518583799.43 \: bits/s $$
 
-  $$ S_b = 32147625.89 \: bits/s $$
+  $$ S_b = 28810211.08 \: bits/s $$
 
-With **numpy.polyfit** we can also calculate the time of propagation _T_ of the signal through the links.
+We can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately _0s_. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets usually need to return through the same route).
+
+With **numpy.polyfit** we can also estimate the time of propagation _T_ of the signal through the links.
 
 - Linux:
-  $$ T = 38.55 \: ms $$
+  $$ T = 35.02 \: ms $$
 
 - Windows:
-  $$ T = 36.32 \: ms $$
+  $$ T = 36.44 \: ms $$
 
-We can see that the throughput is in the order of magnitude of tens of Mbit/s in optimal conditions, meaning that all the links in the connection have the same throughput and the packets queue time in each link is approximately _0s_. If there is a single link which has the lowest throughput among all of the links crossed, it works as a bottleneck limiting the thoughput (notice that this link as to be considered two times because the packets need to return through the same route).
-
-The time of propagation does not depend from the network speed but from the actual speed of the propagation of the signal, so it is governed by physics laws that prevents the signal from being faster than speed of light. If we ping to an host located in America the minimum time of propagation is around _120 ms_, otherwise if we ping to an host located in Europe the _T_ can be close to _30 ms_. Notice that this time depends on the type of connection, wired connection performs better.
+The time of propagation does not depend from the network speed but from the actual speed of the propagation of the signal, so it is governed by physics laws that prevents the signal from being faster than speed of light. If we ping to an host located in America the minimum time of propagation is around _120 ms_, otherwise if we ping to an host located in Europe the _T_ can be close to _30 ms_ or less. Notice that this time depends also on the type of connection, wired connection performs better.

@@ -32,6 +32,8 @@ def route_info(ip: str, sudo):
         exit(1)
     if count_hops == length:
         print("Route is correct")
+    else:
+        print("Some request timed out")
     print(f"Hops to host: {count_hops}")
     output_to_file(ip, ping_info)
 
@@ -81,7 +83,8 @@ def ping(ip, n, ttl, size, sudo):
 
 def run_netperf(ip: str, k_packets=40, TimeToLive=64, l_packets=64, sudo=False):
 
-    ping_info = ping(ip, n=k_packets, ttl=TimeToLive, size=l_packets, sudo=sudo)
+    ping_info = ping(ip, n=k_packets, ttl=TimeToLive,
+                     size=l_packets, sudo=sudo)
     rtt = get_rtt(ping_info)
 
     return rtt
